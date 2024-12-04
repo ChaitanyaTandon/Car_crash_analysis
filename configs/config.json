@@ -1,0 +1,16 @@
+{
+    "file_path":{
+        "source_path":"src/raw",
+        "destination_path":"car_crash_analysis/processed"
+    },
+    "file_format":{
+        "source" : "csv",
+        "destination": "csv"
+    },
+    "functions":{
+        "question_id":8,
+        "mode": "overwrite"
+    },
+    "version":"v1.2.0",
+    "app_name":"Analysis"
+}

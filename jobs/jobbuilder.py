@@ -66,5 +66,12 @@ class JobBuilder():
                 result = Job().noFemale_invoved(df_1=df_1)
                 return result
 
+            elif questionId == 6:
+                files_used = self.question_data_mapping["data_files_used"]
+                print("Flow in question Id 6 -----------------------")
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                result = Job().states_with_highest_injuries(df_1=df_1)
+                return result
+
         except:
             pass

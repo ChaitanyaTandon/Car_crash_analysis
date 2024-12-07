@@ -24,7 +24,13 @@
     "app_name" : "Analysis_5_state_with_highest_count_of_accidents_no_female_involved",
     "data_files_used" : ["Primary_Person_use.csv"]
 
+},
+"6" : {
+    "app_name" : "Analysis_6_states_contributing_to_highest_injuries",
+    "data_files_used" : ["Units_use.csv"]
+
 }
+
 
 
 

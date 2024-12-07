@@ -1,5 +1,6 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import sum,desc,col,count
+from pyspark.sql.functions import sum,desc,col,count,rank
+from pyspark.sql.window import Window
 
 
 class Job():
@@ -88,3 +89,16 @@ class Job():
             print('Error::{}'.format(exception)+"\n")
         finally:
             return df_females_not_involed
+
+    def states_with_highest_injuries(self,df_1):
+        df_units = df_1
+
+        try:
+            df_top_5_injury_count = df_units.groupBy("VEH_MAKE_ID").agg(sum("TOT_INJRY_CNT").alias("Total_injury_count")).orderBy(desc("Total_injury_count")).limit(5)
+            window_spec = Window.orderBy(df_top_5_injury_count["Total_injury_count"].desc())
+            ranked_df = df_top_5_injury_count.withColumn("rank", rank().over(window_spec))
+            ranked_df = ranked_df.filter(col('rank')>=3)
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return ranked_df

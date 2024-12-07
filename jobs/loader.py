@@ -42,3 +42,4 @@ class Loader():
    
         Dataframe.coalesce(1).write.mode(mode).format('csv').option('header','true').save(path)
         return True
+

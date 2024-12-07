@@ -1,8 +1,59 @@
 {
 "1" : {
-    "app_name" : "No. of accidents where males killed > 2",
-    "data_files_used" : ["Charges_use.csv"]
+    "app_name" : "Analysis_1_Accidents_where_Males_killed_greater_than_2",
+    "data_files_used" : ["Primary_Person_use.csv"],
+    "threshold" : 1
+      },
+
+"2" : {
+    "app_name" : "Analysis_2_Number_of_two_wheelers_booked",
+    "data_files_used" : ["Units_use.csv"]
+
+      },
+"3" : {
+    "app_name" : "Analysis_3_driver_died_airbags_did_not_deploy",
+    "data_files_used" : ["Primary_Person_use.csv","Units_use.csv"]
+
+},
+"4" : {
+    "app_name" : "Analysis_4_valid_license_hit_and_run",
+    "data_files_used" : ["Primary_Person_use.csv","Units_use.csv"]
+
+},
+"5" : {
+    "app_name" : "Analysis_5_state_with_highest_count_of_accidents_no_female_involved",
+    "data_files_used" : ["Primary_Person_use.csv"]
+
+},
+"6" : {
+    "app_name" : "Analysis_6_states_contributing_to_highest_injuries",
+    "data_files_used" : ["Units_use.csv"]
+
+},
+"7" : {
+    "app_name" : "Analysis_7_Top_ethnic_user_group_for_VEH_body_type",
+    "data_files_used" :  ["Primary_Person_use.csv","Units_use.csv"]
+
+},
+"8" : {
+    "app_name" : "Analysis_8_Top_alcohol_influenced_pincodes",
+    "data_files_used" :  ["Primary_Person_use.csv"]
+
+},
+"9" : {
+    "app_name" : "Analysis_9_No_damaged_property_veh_damage_above_4_car_insured",
+    "data_files_used" :  ["Charges_use.csv","Damages_use.csv","Units_use.csv"]
+
+},
+"10" : {
+    "app_name" : "Analysis_10",
+    "data_files_used" :  ["Charges_use.csv","Units_use.csv","Primary_Person_use.csv"]
+
 }
+
+
+
+
 
 
 }

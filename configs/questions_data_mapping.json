@@ -34,7 +34,18 @@
     "app_name" : "Analysis_7_Top_ethnic_user_group_for_VEH_body_type",
     "data_files_used" :  ["Primary_Person_use.csv","Units_use.csv"]
 
+},
+"8" : {
+    "app_name" : "Analysis_8_Top_alcohol_influenced_pincodes",
+    "data_files_used" :  ["Primary_Person_use.csv"]
+
+},
+"9" : {
+    "app_name" : "Analysis_9_No_damaged_property_veh_damage_above_4_car_insured",
+    "data_files_used" :  ["Charges_use.csv","Damages_use.csv","Units_use.csv"]
+
 }
+
 
 
 

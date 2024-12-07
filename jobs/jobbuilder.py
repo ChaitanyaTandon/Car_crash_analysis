@@ -81,5 +81,21 @@ class JobBuilder():
                 result = Job().top_ethenic_user_group(df_1=df_1,df_2=df_2)
                 return result
 
+            elif questionId == 8:
+                files_used = self.question_data_mapping["data_files_used"]
+                print("Flow in question Id 8 -----------------------")
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                result = Job().top_alcohol_influenced_pincodes(df_1=df_1)
+                return result
+
+            elif questionId == 9:
+                files_used = self.question_data_mapping["data_files_used"]
+                print("Flow in question Id 9 -----------------------")
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                df_2 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[1])
+                df_3 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[2])
+                result = Job().no_damaged_property_car_insured(df_1=df_1,df_2=df_2,df_3=df_3)
+                return result
+
         except:
             pass

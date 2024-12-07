@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import sum,desc,col,count,rank
+from pyspark.sql.functions import sum,desc,col,count,rank,regexp_extract
 from pyspark.sql.window import Window
 
 
@@ -120,3 +120,39 @@ class Job():
             print('Error::{}'.format(exception)+"\n")
         finally:
             return ranked_df
+
+    
+    def top_alcohol_influenced_pincodes(self,df_1):
+        df_primary_person = df_1
+
+        try:
+            df_alcohol_influenced = df_primary_person.filter("PRSN_ALC_RSLT_ID == 'Positive' and DRVR_ZIP is not null").select('DRVR_ZIP').groupBy('DRVR_ZIP').count()
+            df_alcohol_influenced_top_5 = df_alcohol_influenced.orderBy(df_alcohol_influenced["count"].desc()).limit(5)
+            df_alcohol_influenced_top_5 = df_alcohol_influenced_top_5.withColumnRenamed('count',"Crashes")
+
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return df_alcohol_influenced_top_5
+
+    def no_damaged_property_car_insured(self,df_1,df_2,df_3):
+        df_charges = df_1
+        df_damages = df_2
+        df_units = df_3
+
+        try:
+            no_insurance_df = df_charges.filter(col('CHARGE').contains('NO')).filter(col('CHARGE').contains('INSURANCE')).select('CRASH_ID','UNIT_NBR').withColumnRenamed('CRASH_ID','I_CRASH_ID').withColumnRenamed('UNIT_NBR','I_UNIT_NBR')
+            damaged_df = df_damages.select('CRASH_ID').distinct().withColumnRenamed('CRASH_ID','D_CRASH_ID')
+            joined_df= df_units.join(no_insurance_df,(df_units['CRASH_ID']==no_insurance_df['I_CRASH_ID']) & (df_units['UNIT_NBR']==no_insurance_df['I_UNIT_NBR']),how='left')
+            units_joined_df = joined_df.filter("I_CRASH_ID is null").select('CRASH_ID','UNIT_NBR','VEH_DMAG_SCL_1_ID','VEH_DMAG_SCL_2_ID')
+            damaged_df_combined = units_joined_df.join(damaged_df,units_joined_df['CRASH_ID']==damaged_df['D_CRASH_ID'],how='left')
+            combined= damaged_df_combined.filter("D_CRASH_ID is null").select('CRASH_ID','VEH_DMAG_SCL_1_ID','VEH_DMAG_SCL_2_ID')
+            result = combined.withColumn('DMAG1_RANGE',regexp_extract(col('VEH_DMAG_SCL_1_ID'), "\\d+", 0)) \
+                             .withColumn('DMAG2_RANGE',regexp_extract(col('VEH_DMAG_SCL_2_ID'), "\\d+", 0)) \
+                             .filter("DMAG1_RANGE > 4 or DMAG2_RANGE > 4") \
+                             .select('CRASH_ID').distinct().count()
+            print(result)
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return result

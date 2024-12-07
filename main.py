@@ -18,7 +18,7 @@ if __name__ == "__main__":
                         extractionData(questionId=conf_data["functions"]["analysis_id"])
     print(result)
     #result = Loader(spark=spark).check_df_format(df=result)
-    Loader(spark=spark).writeCsvFile(path=conf_data["file_path"]["destination_path"]+"Analysis " +
-                                     str(conf_data["functions"]["analysis_id"]) + "/",
-                                     Dataframe=result,mode=conf_data["functions"]["mode"])
+    # Loader(spark=spark).writeCsvFile(path=conf_data["file_path"]["destination_path"]+"Analysis " +
+    #                                  str(conf_data["functions"]["analysis_id"]) + "/",
+    #                                  Dataframe=result,mode=conf_data["functions"]["mode"])
     spark.stop()

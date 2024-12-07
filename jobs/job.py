@@ -59,3 +59,22 @@ class Job():
             print('Error::{}'.format(exception)+"\n")
         finally:
             return grouped_df
+
+    def valid_license_hit_and_run(self,df_1,df_2):
+        df_primary_person = df_1
+        df_units          = df_2
+
+        try:
+            df_primary_person = df_primary_person.dropna(subset=["DRVR_LIC_CLS_ID"])
+            exclude_list = ['OTHER/OUT OF STATE','UNKNOWN','UNLICENSED']
+            df_primary_person_valid_license = df_primary_person.filter(~col('DRVR_LIC_CLS_ID').isin(exclude_list))
+            df_units_hnr = df_units.filter(col('VEH_HNR_FL')== 'Y')
+            df_hnr_crash_id  = df_units_hnr.select('CRASH_ID').dropDuplicates(subset=["CRASH_ID"])
+            df_valid_lic_hnr= df_primary_person_valid_license.join(df_hnr_crash_id,df_primary_person_valid_license.CRASH_ID==df_hnr_crash_id.CRASH_ID,how='leftsemi')
+            row_count = df_valid_lic_hnr.count()
+            
+        
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return row_count

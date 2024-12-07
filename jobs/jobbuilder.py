@@ -51,6 +51,14 @@ class JobBuilder():
                 result = Job().top_5_car_brands_airbags_not_deployed(df_1=df_1,df_2=df_2)
                 return result
 
+            elif questionId == 4:
+                files_used = self.question_data_mapping["data_files_used"]
+                print("Flow in question Id 4 -----------------------")
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                df_2 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[1])
+                result = Job().valid_license_hit_and_run(df_1=df_1,df_2=df_2)
+                return result
+
 
         except:
             pass

@@ -78,3 +78,13 @@ class Job():
             print('Error::{}'.format(exception)+"\n")
         finally:
             return row_count
+
+    def noFemale_invoved(self,df_1):
+        df_primary_person = df_1
+
+        try:
+            df_females_not_involed = df_primary_person.filter(col('PRSN_GNDR_ID') != "FEMALE").groupBy("DRVR_LIC_STATE_ID").agg(count("*").alias("count")).orderBy(desc("count")).limit(1)
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return df_females_not_involed

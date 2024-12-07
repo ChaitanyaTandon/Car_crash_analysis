@@ -17,7 +17,7 @@ if __name__ == "__main__":
     result = JobBuilder(path=conf_data["file_path"]["source_path"],spark=spark,question_data_mapping=question_data_mapping). \
                         extractionData(questionId=conf_data["functions"]["analysis_id"])
     print(result)
-    # Loader(spark=spark).writeCsvFile(path=conf_data["file_path"]["destination_path"]+"Analysis " +
-    #                                  str(conf_data["functions"]["analysis_id"]) + "/",
-    #                                  Dataframe=result,mode=conf_data["functions"]["mode"])
+    Loader(spark=spark).writeCsvFile(path=conf_data["file_path"]["destination_path"]+"Analysis " +
+                                     str(conf_data["functions"]["analysis_id"]) + "/",
+                                     Dataframe=result,mode=conf_data["functions"]["mode"])
     spark.stop()

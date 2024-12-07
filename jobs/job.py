@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import sum,desc,col,count,rank,regexp_extract,row_number
+from pyspark.sql.functions import sum,desc,col,count,rank,regexp_extract,row_number,countDistinct
 from pyspark.sql.window import Window
 
 
@@ -35,7 +35,7 @@ class Job():
     def two_wheelers_booked(self,df):
         df_units = df
         try:
-            count_2_wheelers = df_units.select('VIN').filter((col('VEH_BODY_STYL_ID')).like('%MOTORCYCLE%')).distinct().count()
+            count_2_wheelers = df_units.select('VIN').filter((col('VEH_BODY_STYL_ID')).like('%MOTORCYCLE%')).agg(countDistinct('VIN').alias('count'))
         except Exception as exception:
             print('Error::{}'.format(exception)+"\n")
         finally:
@@ -72,7 +72,7 @@ class Job():
             df_units_hnr = df_units.filter(col('VEH_HNR_FL')== 'Y')
             df_hnr_crash_id  = df_units_hnr.select('CRASH_ID').dropDuplicates(subset=["CRASH_ID"])
             df_valid_lic_hnr= df_primary_person_valid_license.join(df_hnr_crash_id,df_primary_person_valid_license.CRASH_ID==df_hnr_crash_id.CRASH_ID,how='leftsemi')
-            row_count = df_valid_lic_hnr.count()
+            row_count =  df_valid_lic_hnr.agg(count('CRASH_ID').alias('count'))
             
         
         except Exception as exception:
@@ -150,7 +150,8 @@ class Job():
             result = combined.withColumn('DMAG1_RANGE',regexp_extract(col('VEH_DMAG_SCL_1_ID'), "\\d+", 0)) \
                              .withColumn('DMAG2_RANGE',regexp_extract(col('VEH_DMAG_SCL_2_ID'), "\\d+", 0)) \
                              .filter("DMAG1_RANGE > 4 or DMAG2_RANGE > 4") \
-                             .select('CRASH_ID').distinct().count()
+                             .select('CRASH_ID').distinct()
+            result = result.agg(count('CRASH_ID').alias('count'))
             print(result)
         except Exception as exception:
             print('Error::{}'.format(exception)+"\n")

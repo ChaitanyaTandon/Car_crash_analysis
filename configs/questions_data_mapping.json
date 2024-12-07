@@ -3,6 +3,12 @@
     "app_name" : "Analysis_1_Accidents_where_Males_killed_greater_than_2",
     "data_files_used" : ["Primary_Person_use.csv"],
     "threshold" : 1
+      },
+
+"2" : {
+    "app_name" : "Analysis_2_Number_of_two_wheelers_booked",
+    "data_files_used" : ["Units_use.csv"]
+
 }
 
 

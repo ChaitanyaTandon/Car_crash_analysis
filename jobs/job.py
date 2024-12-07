@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import sum,desc
+from pyspark.sql.functions import sum,desc,col
 
 
 class Job():
@@ -25,8 +25,17 @@ class Job():
             df_male_death_counts = df_primary_person_male.groupBy("CRASH_ID").agg(sum("DEATH_CNT").alias("total_deaths"))
             print("==============================================")
             crashes_male_deaths_more_than_2 = df_male_death_counts.filter(df_male_death_counts.total_deaths > threshold)
-            #crashes_male_deaths_more_than_2 = df_male_death_counts.filter(df_male_death_counts.total_deaths > 2).count()
         except Exception as exception:
             print('Error::{}'.format(exception)+"\n")
         finally:
             return crashes_male_deaths_more_than_2
+
+
+    def two_wheelers_booked(self,df):
+        df_units = df
+        try:
+            count_2_wheelers = df_units.select('VIN').filter((col('VEH_BODY_STYL_ID')).like('%MOTORCYCLE%')).distinct().count()
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return count_2_wheelers

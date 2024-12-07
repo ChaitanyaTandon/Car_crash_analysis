@@ -35,5 +35,13 @@ class JobBuilder():
                 df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
                 result = Job().get_males_killed_above_threshold(df=df_1,threshold = threshold)
                 return result
+
+            elif questionId == 2:
+                files_used = self.question_data_mapping["data_files_used"]
+                print("Flow in question Id 2 -----------------------")
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                result = Job().two_wheelers_booked(df=df_1)
+                return result
+
         except:
             pass

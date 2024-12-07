@@ -11,10 +11,7 @@ class JobBuilder():
         self.spark = spark
         self.path = path
         self.question_data_mapping = question_data_mapping
-        # self.spark.sparkContext.setLogLevel("ERROR")
-        # self.spark.sparkContext.setLogLevel("WARN")
-        # self.spark.sparkContext.setLogLevel("INFO")
-        #self.spark.sparkContext.setLogLevel("DEBUG")
+        self.spark.sparkContext.setLogLevel("ERROR")
         
     def extractionData(self, questionId:int):
         """_summary_

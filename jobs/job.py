@@ -4,21 +4,25 @@ from pyspark.sql.window import Window
 
 
 class Job():
-    """Analysis Job Function
+    """
+        Analysis Job Function
     """
     def __init__(self):
         pass
         
             
     def get_males_killed_above_threshold(self,df,threshold: int)->DataFrame:
-        """_summary_
-            The No of Occurences of crashes where number of males killed 
-            are greater than threshold value, 2 in this case  
-        Args:
-            personDataframe (DataFrame): Pyspark DataFrame object.
-            threshold (int) : 2 in this case (can be changed accordingly)
-        Returns:
-            DataFrame: Pyspark DataFrame object.
+        """      
+        
+        Identifies crashes where the number of males killed exceeds a specified threshold.
+
+        Parameters:
+        ----------
+        df : pyspark.sql.DataFrame
+            Input DataFrame containing primary person information with columns `PRSN_GNDR_ID` and `DEATH_CNT`.
+        
+        threshold : int
+            The threshold value for the number of deaths (e.g., 2 in this case).
         """
         try:
             df_primary_person_male = df.filter(df.PRSN_GNDR_ID == "MALE")
@@ -32,17 +36,74 @@ class Job():
             return crashes_male_deaths_more_than_2
 
 
-    def two_wheelers_booked(self,df):
-        df_units = df
-        try:
-            count_2_wheelers = df_units.select('VIN').filter((col('VEH_BODY_STYL_ID')).like('%MOTORCYCLE%')).agg(countDistinct('VIN').alias('count'))
-        except Exception as exception:
-            print('Error::{}'.format(exception)+"\n")
-        finally:
-            return count_2_wheelers
+    def two_wheelers_booked(self, df: DataFrame) -> DataFrame:
+            """
+            Computes the count of two wheelers are booked for crashes
+
+            Parameters:
+            ----------
+            df : pyspark.sql.DataFrame
+                Input DataFrame containing vehicle booking information with columns
+                including `VIN` and `VEH_BODY_STYL_ID`.
+
+            Returns:
+            -------
+            pyspark.sql.DataFrame
+                A DataFrame containing a single row and column (`count`) with the count
+                of distinct two-wheeler vehicles.
+
+            Raises:
+            ------
+            ValueError:
+                If the input DataFrame is empty or missing required columns.
+            Exception:
+                For any unexpected errors during processing.
+            """
+            try:
+                # Validate that required columns exist in the input DataFrame
+                required_columns = {"VIN", "VEH_BODY_STYL_ID"}
+                if not required_columns.issubset(df.columns):
+                    raise ValueError(f"Input DataFrame must contain columns: {required_columns}")
+
+                # Compute the count of distinct two-wheelers (motorcycles)
+                count_2_wheelers = (
+                    df.select("VIN")
+                    .filter(col("VEH_BODY_STYL_ID").like("%MOTORCYCLE%"))
+                    .agg(countDistinct("VIN").alias("count"))
+                )
+
+                return count_2_wheelers
+
+            except ValueError as ve:
+                print(f"ValueError: {ve}")
+                raise
+
+            except Exception as exception:
+                print(f"An error occurred: {exception}")
+                raise
 
 
     def top_5_car_brands_airbags_not_deployed(self,df_1,df_2):
+        """
+        Identifies the top 5 car brands where airbags were not deployed during crashes 
+        that resulted in the death of a driver.
+
+        Parameters:
+        ----------
+        df_primary_person : pyspark.sql.DataFrame
+            Input DataFrame containing primary person crash details, including columns
+            `PRSN_TYPE_ID`, `PRSN_INJRY_SEV_ID`, `PRSN_AIRBAG_ID`, and `CRASH_ID`.
+        
+        df_units : pyspark.sql.DataFrame
+            Input DataFrame containing vehicle details, including columns `CRASH_ID`, 
+            `VEH_MAKE_ID`, and `DEATH_CNT`.
+
+        Returns:
+        -------
+        pyspark.sql.DataFrame
+            A DataFrame with two columns: `VEH_MAKE_ID` and `count`, representing the top 5 
+            vehicle makes with the highest number of such incidents.
+        """
         df_primary_person = df_1
         df_units          = df_2
 
@@ -62,6 +123,26 @@ class Job():
             return grouped_df
 
     def valid_license_hit_and_run(self,df_1,df_2):
+        """
+        Computes the count of hit-and-run incidents where the driver had a valid license.
+
+        Parameters:
+        ----------
+        df_primary_person : pyspark.sql.DataFrame
+            Input DataFrame containing primary person crash details, including columns
+            `DRVR_LIC_CLS_ID` and `CRASH_ID`.
+
+        df_units : pyspark.sql.DataFrame
+            Input DataFrame containing vehicle details, including columns `CRASH_ID`
+            and `VEH_HNR_FL`.
+
+        Returns:
+        -------
+        pyspark.sql.DataFrame
+            A DataFrame containing a single row and column (`count`) representing the count 
+            of hit-and-run incidents with valid license holders.
+        """
+
         df_primary_person = df_1
         df_units          = df_2
 
@@ -81,6 +162,22 @@ class Job():
             return row_count
 
     def noFemale_invoved(self,df_1):
+        """
+        Identifies the state with the highest number of incidents where no females 
+        were involved, based on driver license state.
+
+        Parameters:
+        ----------
+        df_primary_person : pyspark.sql.DataFrame
+            Input DataFrame containing primary person crash details, including columns
+            `PRSN_GNDR_ID` and `DRVR_LIC_STATE_ID`.
+
+        Returns:
+        -------
+        pyspark.sql.DataFrame
+            A DataFrame with one row containing the state (`DRVR_LIC_STATE_ID`) with 
+            the highest count of such incidents and the corresponding count.
+        """
         df_primary_person = df_1
 
         try:
@@ -91,6 +188,23 @@ class Job():
             return df_females_not_involed
 
     def states_with_highest_injuries(self,df_1):
+        """
+        Identifies the vehicle makes with the highest total injury counts, ranking them, 
+        and filtering to include only ranks between 3 and 5.
+
+        Parameters:
+        ----------
+        df_units : pyspark.sql.DataFrame
+            Input DataFrame containing vehicle information, including columns `VEH_MAKE_ID`
+            and `TOT_INJRY_CNT`.
+
+        Returns:
+        -------
+        pyspark.sql.DataFrame
+            A DataFrame containing the vehicle makes ranked 3rd and above based on their 
+            total injury count, with columns `VEH_MAKE_ID`, `Total_injury_count`, and `rank`.
+
+        """
         df_units = df_1
 
         try:
@@ -104,6 +218,26 @@ class Job():
             return ranked_df
 
     def top_ethenic_user_group(self,df_1,df_2):
+        """
+        Determines the top ethnic group associated with each vehicle body style based 
+        on the count of occurrences.
+
+        Parameters:
+        ----------
+        df_primary_person : pyspark.sql.DataFrame
+            Input DataFrame containing primary person information, including columns
+            `CRASH_ID`, `UNIT_NBR`, and `PRSN_ETHNICITY_ID`.
+
+        df_units : pyspark.sql.DataFrame
+            Input DataFrame containing vehicle information, including columns `CRASH_ID`,
+            `UNIT_NBR`, and `VEH_BODY_STYL_ID`.
+
+        Returns:
+        -------
+        pyspark.sql.DataFrame
+            A DataFrame containing the top ethnic group for each vehicle body style, with 
+            columns `VEH_BODY_STYL_ID`, `PRSN_ETHNICITY_ID`, and the count of occurrences.
+        """
         df_primary_person = df_1
         df_units = df_2
 
@@ -123,6 +257,22 @@ class Job():
 
     
     def top_alcohol_influenced_pincodes(self,df_1):
+        """
+        Identifies the top 5 ZIP codes with the highest number of crashes involving 
+        alcohol-influenced drivers.
+
+        Parameters:
+        ----------
+        df_primary_person : pyspark.sql.DataFrame
+            Input DataFrame containing primary person crash details, including columns
+            `PRSN_ALC_RSLT_ID` and `DRVR_ZIP`.
+
+        Returns:
+        -------
+        pyspark.sql.DataFrame
+            A DataFrame containing the top 5 ZIP codes with alcohol-influenced crashes, 
+            including columns `DRVR_ZIP` and `Crashes`.
+        """
         df_primary_person = df_1
 
         try:
@@ -136,6 +286,21 @@ class Job():
             return df_alcohol_influenced_top_5
 
     def no_damaged_property_car_insured(self,df_1,df_2,df_3):
+        """
+        Identifies the number of incidents where cars with no insurance and no reported damages
+        have sustained significant property damage Damage Level (VEH_DMAG_SCL~)  > 4.
+
+        Parameters:
+        ----------
+        df_charges : pyspark.sql.DataFrame
+            Input DataFrame containing charge details, including columns `CHARGE`, `CRASH_ID`, and `UNIT_NBR`.
+        
+        df_damages : pyspark.sql.DataFrame
+            Input DataFrame containing damage details, including `CRASH_ID`.
+
+        df_units : pyspark.sql.DataFrame
+            Input DataFrame containing unit details, including `CRASH_ID`, `UNIT_NBR`, `VEH_DMAG_SCL_1_ID`, and `VEH_DMAG_SCL_2_ID`.
+        """
         df_charges = df_1
         df_damages = df_2
         df_units = df_3
@@ -160,6 +325,22 @@ class Job():
 
 
     def top_vehicle_makers(self,df_1,df_2,df_3):
+        """
+        Identifies the top 5 vehicle makes involved in speed-related charges, 
+        based on various filtering criteria including vehicle color, license state, 
+        and driver license status.
+
+        Parameters:
+        ----------
+        df_charges : pyspark.sql.DataFrame
+            Input DataFrame containing charge details, including columns `CHARGE`, `CRASH_ID`, and `UNIT_NBR`.
+        
+        df_units : pyspark.sql.DataFrame
+            Input DataFrame containing unit details, including columns `VEH_COLOR_ID`, `VEH_LIC_STATE_ID`, `VEH_MAKE_ID`, and `UNIT_NBR`.
+        
+        df_primary_person : pyspark.sql.DataFrame
+            Input DataFrame containing primary person details, including columns `DRVR_LIC_CLS_ID`, `CRASH_ID`, and `UNIT_NBR`.
+        """
         df_charges = df_1
         df_units = df_2
         df_primary_person = df_3

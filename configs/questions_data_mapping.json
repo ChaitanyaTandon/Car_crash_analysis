@@ -1,7 +1,8 @@
 {
 "1" : {
-    "app_name" : "No. of accidents where males killed > 2",
-    "data_files_used" : ["Charges_use.csv"]
+    "app_name" : "Analysis_1_Accidents_where_Males_killed_greater_than_2",
+    "data_files_used" : ["Primary_Person_use.csv"],
+    "threshold" : 1
 }
 
 

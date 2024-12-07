@@ -7,9 +7,10 @@ class JobBuilder():
     """
         JobBuilder with options
     """
-    def __init__(self,path,spark:SparkSession):
+    def __init__(self,path,spark:SparkSession,question_data_mapping):
         self.spark = spark
         self.path = path
+        self.question_data_mapping = question_data_mapping
         # self.spark.sparkContext.setLogLevel("ERROR")
         # self.spark.sparkContext.setLogLevel("WARN")
         # self.spark.sparkContext.setLogLevel("INFO")
@@ -28,8 +29,11 @@ class JobBuilder():
                 return None
             
             elif questionId==1:
+                files_used = self.question_data_mapping["data_files_used"]
+                threshold = self.question_data_mapping["threshold"]
                 print("Flow in question Id 1 -----------------------")
-                result = Job().get_males_killed_above_threshold(df=Loader(spark=self.spark).readCsvFile(path=self.path + "Primary_Person_use.csv"))
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                result = Job().get_males_killed_above_threshold(df=df_1,threshold = threshold)
                 return result
         except:
             pass

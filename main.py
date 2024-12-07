@@ -16,11 +16,8 @@ if __name__ == "__main__":
     question_data_mapping = FileLoader().load_json_data("configs/questions_data_mapping.json")
     spark = SparkSession.builder.appName("Analysis").getOrCreate()
     result = JobBuilder(path=conf_data["file_path"]["source_path"],spark=spark).extractionData(questionId=conf_data["functions"]["analysis_id"])
-    # df = Loader(spark).readCsvFile(path=conf_data["file_path"]["source_path"]+"Charges_use.csv")
     result.show()
-    #Loader(spark=spark).writeCsvFile(path=conf_data["file_path"]["destination_path"]+"Question " + str(conf_data["functions"]["analysis_id"]) + "/",Dataframe=result,mode=conf_data["functions"]["mode"])
-    #result.write.mode("overwrite").format('csv').option('header','true').save("src/processed/")
-    
-    #spark.read.format("csv").load("src/raw/Charges_use.csv").show()
-
+    Loader(spark=spark).writeCsvFile(path=conf_data["file_path"]["destination_path"]+"Analysis " +
+                                     str(conf_data["functions"]["analysis_id"]) + "/",
+                                     Dataframe=result,mode=conf_data["functions"]["mode"])
     spark.stop()

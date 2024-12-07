@@ -43,8 +43,3 @@ class Loader():
         Dataframe.coalesce(1).write.mode(mode).format('csv').option('header','true').save(path)
         return True
 
-    def check_df_format(self,df):
-        if type(df) in ['int','float']:
-            df = self.spark.createDataFrame([(df,)], ["row_count"])
-
-        return df

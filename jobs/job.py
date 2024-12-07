@@ -7,8 +7,8 @@ class Job():
     """Analysis Job Function
     """
     def __init__(self):
-        # self.logger = Logger()
         pass
+        
             
     def get_males_killed_above_threshold(self,df,threshold: int)->DataFrame:
         """_summary_

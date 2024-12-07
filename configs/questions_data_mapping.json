@@ -44,6 +44,11 @@
     "app_name" : "Analysis_9_No_damaged_property_veh_damage_above_4_car_insured",
     "data_files_used" :  ["Charges_use.csv","Damages_use.csv","Units_use.csv"]
 
+},
+"10" : {
+    "app_name" : "Analysis_10",
+    "data_files_used" :  ["Charges_use.csv","Units_use.csv","Primary_Person_use.csv"]
+
 }
 
 

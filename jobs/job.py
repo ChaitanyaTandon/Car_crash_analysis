@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
-from pyspark.sql.functions import sum,desc,col,count,rank,regexp_extract
+from pyspark.sql.functions import sum,desc,col,count,rank,regexp_extract,row_number
 from pyspark.sql.window import Window
 
 
@@ -156,3 +156,28 @@ class Job():
             print('Error::{}'.format(exception)+"\n")
         finally:
             return result
+
+
+    def top_vehicle_makers(self,df_1,df_2,df_3):
+        df_charges = df_1
+        df_units = df_2
+        df_primary_person = df_3
+
+        try:
+            speed_charge_df = df_charges.filter(col('CHARGE').contains('SPEED')).select('CRASH_ID','UNIT_NBR','CHARGE') 
+            top_col_df = df_units.filter("VEH_COLOR_ID != 'NA'").select('VEH_COLOR_ID').groupBy('VEH_COLOR_ID').count()
+            top_col_df = top_col_df.withColumn('rn',row_number().over(Window.orderBy(col('count').desc()))).filter("rn <=10").select('VEH_COLOR_ID')
+            top_states_df = df_units.filter(~col('VEH_LIC_STATE_ID').isin(['NA'])).select('VEH_LIC_STATE_ID').groupBy('VEH_LIC_STATE_ID').count()
+            top_states_df = top_states_df.withColumn('rn',row_number().over(Window.orderBy(col('count').desc()))).filter("rn <=25").select('VEH_LIC_STATE_ID')
+            subjoin = df_units.join(top_col_df,on=['VEH_COLOR_ID'],how='inner').select('CRASH_ID','UNIT_NBR','VEH_MAKE_ID','VEH_LIC_STATE_ID')
+            chargesubjoin = subjoin.join(speed_charge_df,on=['CRASH_ID','UNIT_NBR'],how='inner').select('CRASH_ID','UNIT_NBR','VEH_MAKE_ID','VEH_LIC_STATE_ID')
+            combined_df = chargesubjoin.join(top_states_df,on=['VEH_LIC_STATE_ID'],how='inner').select('CRASH_ID','UNIT_NBR','VEH_MAKE_ID')
+            licensed_df = df_primary_person.filter("DRVR_LIC_CLS_ID != 'UNLICENSED'").select('CRASH_ID','UNIT_NBR')
+            final_df = combined_df.join(licensed_df,on=['CRASH_ID','UNIT_NBR'],how='inner').select('CRASH_ID','VEH_MAKE_ID').groupBy('VEH_MAKE_ID').count() 
+            final_df = final_df.withColumn('rn',row_number().over(Window.orderBy(col('count').desc()))).filter("rn <= 5").select('VEH_MAKE_ID')
+
+            
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return final_df

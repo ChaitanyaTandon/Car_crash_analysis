@@ -97,5 +97,17 @@ class JobBuilder():
                 result = Job().no_damaged_property_car_insured(df_1=df_1,df_2=df_2,df_3=df_3)
                 return result
 
+            elif questionId == 10:
+                files_used = self.question_data_mapping["data_files_used"]
+                print("Flow in question Id 10 -----------------------")
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                print(df_1.show())
+                df_2 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[1])
+                print(df_2.show())
+                df_3 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[2])
+                print(df_3.show())
+                result = Job().top_vehicle_makers(df_1=df_1,df_2=df_2,df_3=df_3)
+                return result
+
         except:
             pass

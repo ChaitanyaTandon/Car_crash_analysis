@@ -73,5 +73,13 @@ class JobBuilder():
                 result = Job().states_with_highest_injuries(df_1=df_1)
                 return result
 
+            elif questionId == 7:
+                files_used = self.question_data_mapping["data_files_used"]
+                print("Flow in question Id 7 -----------------------")
+                df_1 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[0])
+                df_2 = Loader(spark=self.spark).readCsvFile(path=self.path + files_used[1])
+                result = Job().top_ethenic_user_group(df_1=df_1,df_2=df_2)
+                return result
+
         except:
             pass

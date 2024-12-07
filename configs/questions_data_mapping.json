@@ -29,7 +29,13 @@
     "app_name" : "Analysis_6_states_contributing_to_highest_injuries",
     "data_files_used" : ["Units_use.csv"]
 
+},
+"7" : {
+    "app_name" : "Analysis_7_Top_ethnic_user_group_for_VEH_body_type",
+    "data_files_used" :  ["Primary_Person_use.csv","Units_use.csv"]
+
 }
+
 
 
 

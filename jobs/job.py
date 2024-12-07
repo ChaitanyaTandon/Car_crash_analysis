@@ -102,3 +102,21 @@ class Job():
             print('Error::{}'.format(exception)+"\n")
         finally:
             return ranked_df
+
+    def top_ethenic_user_group(self,df_1,df_2):
+        df_primary_person = df_1
+        df_units = df_2
+
+        try:
+            ethnic_df = df_primary_person.filter("PRSN_ETHNICITY_ID != 'NA' and PRSN_ETHNICITY_ID != 'UNKNOWN' and PRSN_ETHNICITY_ID != 'OTHER'").select('CRASH_ID','UNIT_NBR','PRSN_ETHNICITY_ID')
+            body_style_df = df_units.filter("VEH_BODY_STYL_ID != 'NA' and VEH_BODY_STYL_ID != 'UNKNOWN' and VEH_BODY_STYL_ID != 'NOT REPORTED'").filter(~col('VEH_BODY_STYL_ID').like('OTHER%')).select('CRASH_ID','UNIT_NBR','VEH_BODY_STYL_ID')
+            combined_df = body_style_df.join(ethnic_df,on=['CRASH_ID','UNIT_NBR'],how='inner')
+            grouped_df = combined_df.groupBy('VEH_BODY_STYL_ID','PRSN_ETHNICITY_ID').count() 
+            window_spec = Window.partitionBy("VEH_BODY_STYL_ID").orderBy(grouped_df["count"].desc())
+            ranked_df = grouped_df.withColumn("rank", rank().over(window_spec))
+            ranked_df = ranked_df.filter(col('rank')==1)
+            ranked_df = ranked_df.drop('rank')
+        except Exception as exception:
+            print('Error::{}'.format(exception)+"\n")
+        finally:
+            return ranked_df

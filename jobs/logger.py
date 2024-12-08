@@ -1,6 +1,5 @@
 import os
 import logging 
-#from .settings import settings  
 from pyspark.sql import SparkSession
  
 

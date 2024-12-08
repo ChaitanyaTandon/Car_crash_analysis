@@ -19,12 +19,23 @@ Application should perform below analysis and store the results for each analysi
 10.	Analysis 10: Determine the Top 5 Vehicle Makes where drivers are charged with speeding related offences, has licensed Drivers, used top 10 used vehicle colours and has car licensed with the Top 25 states with highest number of offences (to be deduced from the data)
 
 #### Expected Output:
-1.       Develop an application which is modular & follows software engineering best practices (e.g. Classes, docstrings, functions, config driven, command line executable through spark-submit)
+*       Develop an application which is modular & follows software engineering best practices (e.g. Classes, docstrings, functions config driven, command line executable through spark-submit)
+*     Code should be properly organized in folders as a project.
+*     Input data sources and output should be config driven
+*     Code should be strictly developed using Dataframe APIs (Do not use Spark SQL)
+*     Upload the entire project in Github repo
 
-2.       Code should be properly organized in folders as a project.
 
-3.       Input data sources and output should be config driven
+Run the application by using following command :-
+```
+spark-submit --master local[*] main.py
+```
+main.py is the main file invokes the JobBuilder class to build and execute analysis based on question_id mentioned in config.json file.
 
-4.       Code should be strictly developed using Dataframe APIs (Do not use Spark SQL)
+You can find the rough version of the analysis in the test_notebook.ipynb file in the notebook directory.
 
-5.       Upload the entire project in Github repo
+## ⛏️ Built Using <a name = "built_using"></a>
+
+- [Pyspark](https://spark.apache.org/docs/latest/api/python/) - Data Processing Framework
+- [Jupyter Notebook](https://jupyter.org/) - Data Analysis Tool
+

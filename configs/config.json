@@ -12,5 +12,6 @@
         "mode": "overwrite"
     },
     "version":"v1.0",
-    "app_name":"Analysis"
+    "app_name":"Analysis",
+    "logging_path" : "/src/logs"
 }

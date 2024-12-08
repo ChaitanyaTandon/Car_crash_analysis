@@ -1,0 +1,11 @@
+2024-12-09 00:55:16,979 INFO:log_namespace.main {'file_path': {'source_path': 'src/raw/', 'destination_path': 'src/processed/'}, 'file_format': {'source': 'csv', 'destination': 'csv'}, 'functions': {'analysis_id': 1, 'mode': 'overwrite'}, 'version': 'v1.0', 'app_name': 'Analysis', 'logging_path': '/src/logs'}
+2024-12-09 00:55:19,953 INFO:log_namespace.main <pyspark.sql.session.SparkSession object at 0x0000016DD39C23C0>
+2024-12-09 00:55:24,352 INFO:log_namespace.main DataFrame[CRASH_ID: int, total_deaths: bigint]
+2024-12-09 00:56:43,492 INFO:log_namespace.main {'file_path': {'source_path': 'src/raw/', 'destination_path': 'src/processed/'}, 'file_format': {'source': 'csv', 'destination': 'csv'}, 'functions': {'analysis_id': 1, 'mode': 'overwrite'}, 'version': 'v1.0', 'app_name': 'Analysis', 'logging_path': '/src/logs'}
+2024-12-09 00:56:46,386 INFO:log_namespace.main <pyspark.sql.session.SparkSession object at 0x0000022DF02B23C0>
+2024-12-09 00:59:59,350 INFO:log_namespace.main {'file_path': {'source_path': 'src/raw/', 'destination_path': 'src/processed/'}, 'file_format': {'source': 'csv', 'destination': 'csv'}, 'functions': {'analysis_id': 1, 'mode': 'overwrite'}, 'version': 'v1.0', 'app_name': 'Analysis', 'logging_path': '/src/logs'}
+2024-12-09 01:00:02,455 INFO:log_namespace.main <pyspark.sql.session.SparkSession object at 0x000001EE17492510>
+2024-12-09 01:00:26,348 INFO:log_namespace.main {'file_path': {'source_path': 'src/raw/', 'destination_path': 'src/processed/'}, 'file_format': {'source': 'csv', 'destination': 'csv'}, 'functions': {'analysis_id': 1, 'mode': 'overwrite'}, 'version': 'v1.0', 'app_name': 'Analysis', 'logging_path': '/src/logs'}
+2024-12-09 01:00:29,545 INFO:log_namespace.main <pyspark.sql.session.SparkSession object at 0x000002507B6923C0>
+2024-12-09 01:01:03,680 INFO:log_namespace.main {'file_path': {'source_path': 'src/raw/', 'destination_path': 'src/processed/'}, 'file_format': {'source': 'csv', 'destination': 'csv'}, 'functions': {'analysis_id': 1, 'mode': 'overwrite'}, 'version': 'v1.0', 'app_name': 'Analysis', 'logging_path': '/src/logs'}
+2024-12-09 01:01:06,902 INFO:log_namespace.main <pyspark.sql.session.SparkSession object at 0x000001A8405523C0>

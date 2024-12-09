@@ -1,70 +1,35 @@
-import os
-import logging 
-from pyspark.sql import SparkSession
- 
+import logging
 
-class Logger(object):
-    def __init__(self, name,PARENT_DIR):
-        """
-            Formatting Python log messages
-        """
-        name = name.replace('.log','')
-        logger = logging.getLogger('log_namespace.%s' % name)    # log_namespace can be replaced with your namespace 
-        logger.setLevel(logging.DEBUG)
-        if not logger.handlers:
-            file_name = os.path.join(os.path.join(PARENT_DIR), '%s.log' % name)    
-            handler = logging.FileHandler(file_name)
-            formatter = logging.Formatter('%(asctime)s %(levelname)s:%(name)s %(message)s')
-            handler.setFormatter(formatter)
-            handler.setLevel(logging.DEBUG)
-            logger.addHandler(handler)
-        self._logger = logger
+class AppLogger:
 
-    def get(self):
-        return self._logger
+    def __init__(self,log_file_name,log_file_path):
+        self.log_file_name = log_file_name
+        self.log_file_path = log_file_path
+        self.log_file = self.log_file_path + self.log_file_name
+        self.configure_logging()
+
+    def configure_logging(self):
+        logging.basicConfig(
+            filename=self.log_file,
+            encoding="utf-8",
+            filemode="w",
+            format="{asctime} - {levelname} - {message}",
+            style="{",
+            datefmt="%Y-%m-%d %H:%M",
+            level=logging.INFO
+        )
     
-    
-class SparkLogger(object):
-    """_summary_
+    def log_debug(self,message,exc_info=False):
+        logging.debug(message,exc_info=exc_info)
 
-    Args:
-        object (SparkSession): Use SparkSession to yeild Logs at DEBUG LEVEL.
-    """
-    def __init__(self, spark:SparkSession):
-        """_summary_
-            Get spark app details with which to prefix all messages
-        Args:
-            spark (SparkSession): _description_
-        """
-        conf = spark.sparkContext.getConf()
-        app_id = conf.get('spark.app.id')
-        app_name = conf.get('spark.app.name')
+    def log_info(self,message,exc_info=False):
+        logging.info(message,exc_info=exc_info)
 
-        log4j = spark._jvm.org.apache.log4j
-        message_prefix = '####<-' + app_name + ' ' + app_id + '->####'
-        self.logger = log4j.LogManager.getLogger(message_prefix)
+    def log_warning(self,message,exc_info=False):
+        logging.warning(message,exc_info=exc_info)
 
-    def error(self, message):
-        """_summary_
-            Spark Logger for Errors
-        Args:
-            message (String): Message To Log
-        """
-        self.logger.error(message)
+    def log_error(self,message,exc_info=True):
+        logging.error(message,exc_info=exc_info)
 
-    def warn(self, message):
-        """_summary_
-            Spark Logger for Warning
-
-        Args:
-            message (String): Message To Log
-        """
-        self.logger.warn(message)
-    
-    def info(self, message):
-        """_summary_
-            Spark Logger for information
-        Args:
-            message (String): Message To Log
-        """
-        self.logger.info(message)
+    def log_critical(self,message,exc_info=True):
+        logging.critical(message,exc_info=exc_info)

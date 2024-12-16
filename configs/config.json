@@ -8,9 +8,10 @@
         "destination": "csv"
     },
     "functions":{
-        "analysis_id":1,
+        "analysis_id":10,
         "mode": "overwrite"
     },
     "version":"v1.0",
-    "app_name":"Analysis"
+    "app_name":"Analysis",
+    "logging_path" : "/src/logs/"
 }

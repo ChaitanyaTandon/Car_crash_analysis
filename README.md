@@ -1,5 +1,5 @@
 
-# BCG CASE STUDY
+# CASE STUDY
 ## CAR Crash Analysis
 
 ### Objective
